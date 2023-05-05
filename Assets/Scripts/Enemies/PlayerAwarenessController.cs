@@ -12,9 +12,9 @@ public class PlayerAwarenessController : MonoBehaviour
 
     private Transform player;
 
-    private void Start()
+    private void Awake()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void Update()
