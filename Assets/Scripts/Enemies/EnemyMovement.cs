@@ -28,6 +28,7 @@ public class EnemyMovement : MonoBehaviour
         // Si el jugador está dentro del campo de visión
         if (distance <= visionRadius)
         {
+
             direction.Normalize();
             rb.velocity = direction * speed;
         }

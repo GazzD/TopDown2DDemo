@@ -16,4 +16,9 @@ public class StageLoader : MonoBehaviour
             
         }
     }
+
+    public void LoadLevel(string levelName)
+    {  
+        StartCoroutine(SceneLoadManager.Instance.SceneLoad(levelName));
+    }
 }

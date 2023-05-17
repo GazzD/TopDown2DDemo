@@ -55,10 +55,15 @@ public class GameInput : MonoBehaviour
     {
         return inputActions.Player.Fire.triggered;
     }
+    public bool GetPauseInputDown()
+    {
+        return inputActions.Player.Pause.triggered;
+    }
 
     public void OnDeviceChange(PlayerInput pi)
     {
         isGamepad = pi.currentControlScheme != null && pi.currentControlScheme.Equals("Gamepad");
     }
+
 
 }

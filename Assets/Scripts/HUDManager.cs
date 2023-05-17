@@ -1,9 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 
 public class HUDManager : MonoBehaviour
 {
@@ -13,12 +19,16 @@ public class HUDManager : MonoBehaviour
     public GameObject halfHearth;
     public GameObject emptyHearth;
 
+
+    [SerializeField] private LocalizedString  localStringScore;
+    [SerializeField] private TextMeshProUGUI textComp;
+
     private void Awake()
     {
         print("HUDManager Awake");
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
         else
         {
@@ -30,6 +40,45 @@ public class HUDManager : MonoBehaviour
     private void FixedUpdate()
     {
         UpdateHearts();
+        UpdateScore();
+    }
+
+    private void OnEnable()
+    {
+        localStringScore.Arguments = new object[] { GameManager.Instance?.Score };
+        localStringScore.StringChanged += UpdateScoreLabel;
+        //localStringScore.Add("score", new IntVariable { Value = 0 });
+        
+
+    }
+    private void OnDisable()
+    {
+        localStringScore.StringChanged -= UpdateScoreLabel;
+    }
+
+    private void UpdateScoreLabel(string value)
+    {
+        textComp.text = value;
+    }
+
+    [ContextMenu("Update Score")]
+    public void UpdateScore()
+    {
+        
+        localStringScore.Arguments[0] = GameManager.Instance.Score;
+        localStringScore.RefreshString();
+
+        // Get subtitle text
+        //TextMeshProUGUI textToUpdate = uiElement.GetComponent<DataRTElement>().SubtitleUi;
+
+        // Setup LocalizeStringEvent
+        //LocalizedString localizeString = new LocalizedString(data.DataRTValueLocalizer.TableName, data.DataRTValueLocalizer.SubtitleLocalized);
+
+        // Add local variables to update
+        //localStringScore.Add("variable.score", new IntVariable { Value = GameManager.Instance.score });
+        //localizeString.Add("unitTime", new StringVariable { Value = "min" });
+
+        //uiElement.GetComponent<LocalizeStringEvent>().StringReference = localizeString;
     }
 
     public void UpdateHearts()
@@ -92,4 +141,6 @@ public class HUDManager : MonoBehaviour
         gameObject.SetActive(true);
 
     }
+
+
 }

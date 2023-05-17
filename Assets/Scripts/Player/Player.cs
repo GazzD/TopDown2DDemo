@@ -12,7 +12,7 @@ using static UnityEngine.GridBrushBase;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 7f; // The speed of the player
-    [SerializeField] private float jumpForce = 5f; // The jump force of the player
+    //[SerializeField] private float jumpForce = 5f; // The jump force of the player
     [SerializeField] private float controllerDeadzone = 0.1f; // The deadzone of the controller
     [SerializeField] private float gamepadRotateSmoothing = 1000f; // The smoothing of the rotation when using a gamepad
     
@@ -40,6 +40,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsPaused)
+        {
+            return;
+        }
         HandleMovement();
         HandleRotation();
         HandleInteraction();
@@ -80,6 +84,7 @@ public class Player : MonoBehaviour
         {
             weapon.Fire();
         }
+
     }
 
     private void HandleMovement()

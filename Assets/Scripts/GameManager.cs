@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public int lifes = 3;
+    public int currentMaxLifes = 4;
     public readonly int MAX_LIFES = 8;
     public float invincibilityTime = 3f;
     public bool isInvincible = false;
+    public int Score { get; private set; }
+    public bool IsPaused { get; private set; }
 
     private void Awake()
     {
@@ -24,6 +27,16 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this);
         }
     }
+    
+    public void ResumeGame()
+    {
+        IsPaused = false;
+    }
+
+    public void PauseGame()
+    {
+        IsPaused = true;
+    }
 
     public void GameOver()
     {
@@ -34,10 +47,16 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
-        ResetLifes();
+        ResetProps();
         //HUDManager.Instance?.UpdateHearts();
         SceneLoadManager.Instance?.NewGame();
         HUDManager.Instance?.ShowInterface();
+    }
+
+    public void AddScore(int amount)
+    {
+        Score += amount;
+        HUDManager.Instance.UpdateScore();
     }
 
     [ContextMenu("Add Life")]
@@ -73,24 +92,32 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            GameManager.Instance.GameOver();
+            GameOver();
         }
 
     }
 
-    public void ResetLifes()
+    public void ResetProps()
     {
         lifes = 3;
+        Score = 0;
+        IsPaused = false;
     }
-
-
-    
-
 
     IEnumerator Invulnerability()
     {
         isInvincible = true;
         yield return new WaitForSeconds(invincibilityTime);
         isInvincible = false;
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
+
+    public void Test()
+    {
+        print("Test");
     }
 }

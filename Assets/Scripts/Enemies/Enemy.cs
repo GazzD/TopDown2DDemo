@@ -5,9 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private GameObject dieEffect;
-    [SerializeField] private float movementSpeed = 7f;
     [SerializeField] private float maxHealth;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private int enemyScore = 10;
 
 
     private float currentHealth;
@@ -36,12 +36,10 @@ public class Enemy : MonoBehaviour
             healthBar.UpdateHealthBar(maxHealth, currentHealth, previousHealth);
             spriteRenderer.color = Color.red;
             Invoke("ResetColor", damageDuration);
-            
-
-
         }
         else
         {
+            GameManager.Instance.AddScore(enemyScore);
             Instantiate(dieEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
